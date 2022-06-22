@@ -1,42 +1,50 @@
-import { Providers, ProviderState } from '@microsoft/mgt-element';
-import { Agenda, Login } from '@microsoft/mgt-react';
-import React, { useState, useEffect } from 'react';
-import './App.css';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
-function useIsSignedIn(): [boolean] {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import { MsalProvider } from '@azure/msal-react'
+import { IPublicClientApplication } from '@azure/msal-browser';
 
-  useEffect(() => {
-    const updateState = () => {
-      const provider = Providers.globalProvider;
-      setIsSignedIn(provider && provider.state === ProviderState.SignedIn);
-    };
+import ProvideAppContext from './AppContext';
+import ErrorMessage from './ErrorMessage';
+import NavBar from './NavBar';
+import Welcome from './Welcome';
+import Calendar from './Calendar';
+import NewEvent from './NewEvent';
+import 'bootstrap/dist/css/bootstrap.css';
 
-    Providers.onProviderUpdated(updateState);
-    updateState();
+// <AppPropsSnippet>
+type AppProps= {
+  pca: IPublicClientApplication
+};
+// </AppPropsSnippet>
 
-    return () => {
-      Providers.removeProviderUpdatedListener(updateState);
-    }
-  }, []);
-
-  return [isSignedIn];
-}
-
-function App() {
-  const [isSignedIn] = useIsSignedIn();
-
-  return (
-    <div className="App">
-      <header>
-        <Login />
-      </header>
-      <div>
-        {isSignedIn &&
-          <Agenda />}
-      </div>
-    </div>
+export default function App({ pca }: AppProps) {
+  // <ReturnSnippet>
+  return(
+    <MsalProvider instance={ pca }>
+      <ProvideAppContext>
+        <Router>
+          <NavBar />
+          <Container>
+            <ErrorMessage />
+            <Route exact path="/"
+              render={(props) =>
+                <Welcome {...props} />
+              } />
+            <Route exact path="/calendar"
+              render={(props) =>
+                <Calendar {...props} />
+              } />
+            <Route exact path="/newevent"
+              render={(props) =>
+                <NewEvent {...props} />
+              } />
+          </Container>
+        </Router>
+      </ProvideAppContext>
+    </MsalProvider>
   );
+  // </ReturnSnippet>
 }
-
-export default App;

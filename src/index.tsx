@@ -1,24 +1,52 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
+import {
+  PublicClientApplication,
+  EventType,
+  EventMessage,
+  AuthenticationResult } from '@azure/msal-browser';
+
+import config from './Config';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Providers } from '@microsoft/mgt-element';
-import { Msal2Provider } from '@microsoft/mgt-msal2-provider';
 
-Providers.globalProvider = new Msal2Provider({
-  clientId: '71bfa9f7-8788-4358-a2aa-28e9721dd773',
-  scopes: ['calendars.read', 'user.read', 'openid', 'profile', 'people.read', 'user.readbasic.all']
+// <MsalInstanceSnippet>
+const msalInstance = new PublicClientApplication({
+  auth: {
+    clientId: config.appId,
+    redirectUri: config.redirectUri
+  },
+  cache: {
+    cacheLocation: 'sessionStorage',
+    storeAuthStateInCookie: true
+  }
 });
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
+// Check if there are already accounts in the browser session
+// If so, set the first account as the active account
+const accounts = msalInstance.getAllAccounts();
+if (accounts && accounts.length > 0) {
+  msalInstance.setActiveAccount(accounts[0]);
+}
+
+msalInstance.addEventCallback((event: EventMessage) => {
+  if (event.eventType === EventType.LOGIN_SUCCESS && event.payload) {
+    // Set the active account - this simplifies token acquisition
+    const authResult = event.payload as AuthenticationResult;
+    msalInstance.setActiveAccount(authResult.account);
+  }
+});
+// </MsalInstanceSnippet>
+
+// <RenderSnippet>
+ReactDOM.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <App pca = { msalInstance }/>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
+// </RenderSnippet>
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
