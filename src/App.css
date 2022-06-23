@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  color: #282c34;
+  
 }
 
 .Meeting-card{
@@ -38,14 +38,12 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-body {
-  background-color: #000;
-  color:  #282c34;
-}
+
 
 .calibre-background{
   color:  #282c34;
 }
+
 
 .App-header {
   
