@@ -19,7 +19,9 @@ export default function Welcome(props: RouteComponentProps) {
    <div className='Meeting-card'>
     <div className="p-5 mb-4  rounded-3">
       <Container fluid>
+        <div className='content'></div>
         <div className='heading-collab'>
+          <br/>
         <h1>Calibre Collaborate  </h1>
         </div>
         <p className="lead">
