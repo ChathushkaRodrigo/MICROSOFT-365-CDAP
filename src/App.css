@@ -5,7 +5,7 @@
 
 .Meeting-card{
   margin-left: 100px;
-  color: aliceblue;
+  
   position: absolute;
   top: calc(50% - 170px);
   left: calc(50% - 280px);
