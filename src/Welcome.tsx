@@ -15,7 +15,7 @@ export default function Welcome(props: RouteComponentProps) {
   const app = useAppContext();
 
   return (
-    <div className='calibre-background' >
+    <div className='calibre-background' style={{backgroundColor: "black"}} >
    <div className='Meeting-card'>
     <div className="p-5 mb-4  rounded-3">
       <Container fluid>
