@@ -15,11 +15,15 @@ export default function Welcome(props: RouteComponentProps) {
   const app = useAppContext();
 
   return (
+    <div className='calibre-background' >
+   <div className='Meeting-card'>
     <div className="p-5 mb-4  rounded-3">
       <Container fluid>
+        <div className='heading-collab'>
         <h1>Calibre Collaborate  </h1>
+        </div>
         <p className="lead">
-        now lets get started on scheduling a meeting
+        Lets get started on scheduling a meeting
         </p>
         <AuthenticatedTemplate>
           <div>
@@ -28,9 +32,13 @@ export default function Welcome(props: RouteComponentProps) {
           </div>
         </AuthenticatedTemplate>
         <UnauthenticatedTemplate>
+         <div className='login-btn'>
           <Button color="primary" onClick={app.signIn!}>Click here to sign in</Button>
+          </div>
         </UnauthenticatedTemplate>
       </Container>
+    </div>
+    </div>
     </div>
   );
 }
